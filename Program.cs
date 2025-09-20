@@ -1,5 +1,6 @@
 ﻿using LeetCodeProblems.LeetcodeProblems;
 using System;
+using static LeetCodeProblems.LeetcodeProblems.LinkedListProblems;
 
 namespace LeetCodeProblems
 {
@@ -30,38 +31,38 @@ namespace LeetCodeProblems
 
             var sln = arrproblems.solution(nms);
 
+            var slnprod = arrproblems.MaxProduct(nums);
+
             // Max Sub Array Problem
             int maxsubarr = arrproblems.MaxSubArray(nums);
             // Linked List Problems
-            LinkedListProblems.ListNode l1 = new LinkedListProblems.ListNode(9);
-            l1.next = new LinkedListProblems.ListNode(9);
-            l1.next.next = new LinkedListProblems.ListNode(9);
-            l1.next.next.next = new LinkedListProblems.ListNode(9);
+            ListNode list1 = new ListNode(1, new ListNode(4, new ListNode(5)));
+            ListNode list2 = new ListNode(1, new ListNode(3, new ListNode(4)));
+            ListNode list3 = new ListNode(2, new ListNode(6));
 
-            LinkedListProblems.ListNode l2 = new LinkedListProblems.ListNode(9);
-            l2.next = new LinkedListProblems.ListNode(9);
-            l2.next.next = new LinkedListProblems.ListNode(9);
+            ListNode[] sorted = { list1, list2, list3 };
+            ListNode resultlist = LinkedListProblems.MergeKLists(sorted);
 
-            LinkedListProblems.ListNode resultList = LinkedListProblems.AddTwoNums(l1, l2);
+            //    LinkedListProblems.ListNode resultList = LinkedListProblems.AddTwoNums(l1, l2);
 
-            Console.WriteLine("Result List: ");
-            LinkedListProblems.ListNode current = resultList;
-            while (current != null)
-            {
-                Console.Write(current.val + " -> ");
-                current = current.next;
-            }
-            Console.WriteLine("null");
+            //    Console.WriteLine("Result List: ");
+            //    LinkedListProblems.ListNode current = resultList;
+            //    while (current != null)
+            //    {
+            //        Console.Write(current.val + " -> ");
+            //        current = current.next;
+            //    }
+            //    Console.WriteLine("null");
 
-            Console.WriteLine("Enter the Google Docs URL:");
-            string googleDocUrl = Console.ReadLine();
+            //    Console.WriteLine("Enter the Google Docs URL:");
+            //    string googleDocUrl = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(googleDocUrl))
-            {
-                Console.WriteLine("No URL provided. Exiting.");
-                return;
-            }
-            await PatternMatching.PrintGridFromGoogleDoc(googleDocUrl);
+            //    if (string.IsNullOrWhiteSpace(googleDocUrl))
+            //    {
+            //        Console.WriteLine("No URL provided. Exiting.");
+            //        return;
+            //    }
+            //    await PatternMatching.PrintGridFromGoogleDoc(googleDocUrl);
         }
     }
 }

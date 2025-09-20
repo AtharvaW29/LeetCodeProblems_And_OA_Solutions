@@ -178,82 +178,93 @@ namespace LeetCodeProblems.LeetcodeProblems
 
         public int MaxSubArray(int[] nums)
         {
-            if (nums.Length == 0 || nums == null) return 0;
+            if (nums == null || nums.Length == 0) return 0;
             if(nums.Length == 1)
             {
                 return nums[0];
             }
             else
             {
-                int maxsum = 0, left = 0, right = (nums.Length - 1);
-                for(int i = 0; i < nums.Length; i++)
-                {
-                    maxsum += nums[i];
-                }
-                Console.WriteLine($"The initial sum is: {maxsum}");
+                int left = 0, right = (nums.Length - 1);
 
-                int[] CompAndMergeArr(int[] arr, int left, int right, int maxsum)
+                int CompAndMergeArr(int[] arr, int left, int right, int unusedmax)
                 {
+                    if (left == right) return arr[left];
                     int middle = left + (right - left) / 2;
-                    var LeftArrLen = middle - left;
-                    var RightArrLen = right - middle + 1;
-                    int LeftTempSum = 0;
-                    int RightTempSum = 0;
-                    var LeftTempArr = new int[LeftArrLen];
-                    var RightTempArr = new int[RightArrLen];
-                    int i, j;
                     
-                    for(i = 0; i < LeftArrLen; i++)
+                    int leftMax = CompAndMergeArr(arr, left, middle, unusedmax);
+                    int rightMax = CompAndMergeArr(arr, middle + 1, right, unusedmax);
+
+                    int leftSum = int.MinValue;
+                    int sum = 0;
+                    for(int i = middle; i >= left; i--)
                     {
-                        LeftTempSum += arr[left + i];
-                        LeftTempArr[i] = arr[left + i];
+                        sum += arr[i];
+                        if(sum > leftSum) leftSum = sum;
                     }
-                    for(j = 0; j < RightArrLen; j++)
+
+                    int rightSum = int.MinValue;
+                    sum = 0;
+                    for(int j = middle + 1; j <= right; j++)
                     {
-                        RightTempSum += arr[j + middle];
-                        RightTempArr[j] = arr[middle + j];
+                        sum+= arr[j];
+                        if(sum > rightSum) rightSum = sum;
                     }
-                    if (LeftTempSum > RightTempSum)
-                    {
-                        while(LeftTempSum > maxsum)
-                        {
-                            maxsum = LeftTempSum;
-                            arr = LeftTempArr;
-                            left = 0; right = arr.Length - 1;
-                            CompAndMergeArr(arr, left, right, maxsum);
-                        }
-                    }
-                    if( RightTempSum >= LeftTempSum)
-                    {
-                        while (RightTempSum > maxsum)
-                        {
-                            maxsum = RightTempSum;
-                            arr = RightTempArr;
-                            left = 0; right = arr.Length - 1;
-                            CompAndMergeArr(arr, left, right, maxsum);
-                        }
-                    }
-                    return arr;
+
+                    int crossMax = leftSum + rightSum;
+
+                    return Math.Max(Math.Max(leftMax, rightMax), crossMax);
                 }
 
                 // Calling the CompareAndMergeArr Function
-                //maxsum here is the initial maxsum
-                var arr = CompAndMergeArr(nums, left, right, maxsum);
-                if( arr.Length == nums.Length )
+                int res = CompAndMergeArr(nums, left, right, int.MinValue);
+                return res;
+            }
+        }
+
+        public int MaxProduct(int[] nums)
+        {
+            if (nums == null || nums.Length == 0) return 0;
+            if (nums.Length == 1)
+            {
+                return nums[0];
+            }
+            else
+            {
+                int left = 0, right = (nums.Length - 1);
+
+                int CompAndMergeArr(int[] arr, int left, int right)
                 {
-                    return maxsum;
-                }
-                else
-                {
-                    // Final Sum once again
-                    maxsum = 0;
-                    for (int i = 0; i < arr.Length; i++)
+                    if (left == right) return arr[left];
+                    int middle = left + (right - left) / 2;
+
+                    int leftMax = CompAndMergeArr(arr, left, middle);
+                    int rightMax = CompAndMergeArr(arr, middle + 1, right);
+
+                    int leftProd = int.MinValue;
+                    int prod = 1;
+                    for (int i = middle; i >= left; i--)
                     {
-                        maxsum += arr[i];
+                        prod *= arr[i];
                     }
-                    Console.WriteLine($"Final Max Sum of Sub Array: {maxsum}");
-                    return maxsum;
+                    if (prod > leftProd) leftProd = prod;
+
+                    int rightProd = int.MinValue;
+                    prod = 1;
+                    for (int j = middle + 1; j <= right; j++)
+                    {
+                        prod *= arr[j];
+                    }
+                    if (prod > rightProd) rightProd = prod;
+
+                    int crossMax = leftProd * rightProd;
+
+                    return Math.Max(Math.Max(leftMax, rightMax), crossMax);
                 }
+
+                // Calling the CompareAndMergeArr Function
+                int res = CompAndMergeArr(nums, left, right);
+                return res;
             }
         }
     }
