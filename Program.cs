@@ -35,15 +35,19 @@ namespace LeetCodeProblems
 
             // Max Sub Array Problem
             int maxsubarr = arrproblems.MaxSubArray(nums);
+
+            //Sliding Window Maximum
+            int[] slidingwinddowmax = arrproblems.MaxSlidingWindow(nums, 3);
+
             // Linked List Problems
             ListNode list1 = new ListNode(1, new ListNode(4, new ListNode(5)));
             ListNode list2 = new ListNode(1, new ListNode(3, new ListNode(4)));
             ListNode list3 = new ListNode(2, new ListNode(6));
 
             ListNode[] sorted = { list1, list2, list3 };
-            ListNode resultlist = LinkedListProblems.MergeKLists(sorted);
+            //ListNode resultlist = LinkedListProblems.MergeKLists(sorted);
 
-            //    LinkedListProblems.ListNode resultList = LinkedListProblems.AddTwoNums(l1, l2);
+            //    LinkedListProblems.ListNode resultList = LinkedListProblems.AddTwoNums(list1, list2);
 
             //    Console.WriteLine("Result List: ");
             //    LinkedListProblems.ListNode current = resultList;

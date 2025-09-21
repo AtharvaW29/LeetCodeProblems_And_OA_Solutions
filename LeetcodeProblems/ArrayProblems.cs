@@ -222,6 +222,7 @@ namespace LeetCodeProblems.LeetcodeProblems
             }
         }
 
+        // Q. Fins the MaxProduct Sub Array
         public int MaxProduct(int[] nums)
         {
             if (nums == null || nums.Length == 0) return 0;
@@ -231,41 +232,50 @@ namespace LeetCodeProblems.LeetcodeProblems
             }
             else
             {
-                int left = 0, right = (nums.Length - 1);
-
-                int CompAndMergeArr(int[] arr, int left, int right)
+                int maxprod = int.MinValue, prefix = 1, suffix = 1;
+                for (int i = 0; i < nums.Length; i++)
                 {
-                    if (left == right) return arr[left];
-                    int middle = left + (right - left) / 2;
-
-                    int leftMax = CompAndMergeArr(arr, left, middle);
-                    int rightMax = CompAndMergeArr(arr, middle + 1, right);
-
-                    int leftProd = int.MinValue;
-                    int prod = 1;
-                    for (int i = middle; i >= left; i--)
-                    {
-                        prod *= arr[i];
-                    }
-                    if (prod > leftProd) leftProd = prod;
-
-                    int rightProd = int.MinValue;
-                    prod = 1;
-                    for (int j = middle + 1; j <= right; j++)
-                    {
-                        prod *= arr[j];
-                    }
-                    if (prod > rightProd) rightProd = prod;
-
-                    int crossMax = leftProd * rightProd;
-
-                    return Math.Max(Math.Max(leftMax, rightMax), crossMax);
+                    if (prefix == 0) prefix = 1;
+                    if (suffix == 0) suffix = 1;
+                    prefix = prefix * nums[i];
+                    suffix = suffix * nums[nums.Length - i - 1];
+                    maxprod = Math.Max(maxprod, Math.Max(prefix, suffix));
                 }
-
-                // Calling the CompareAndMergeArr Function
-                int res = CompAndMergeArr(nums, left, right);
-                return res;
+                return maxprod;
             }
+        }
+
+        // Q. Find the Kth Largest Element in the Array
+        public int FindKthlargest(int[] arr, int k)
+        {
+            int result = 0;
+            LinkedListProblems.HeapSortArr(arr);
+            int index = arr.Length - 1;
+            int target = index - (k + 1);
+            result = arr[target];
+            return result;
+        }
+        // Q. Sliding Window Maximum
+        public int[] MaxSlidingWindow(int[] nums, int k)
+        {
+            // Brute Force Approach
+            List<int> maxarr = new();
+            for (int i = 0; i < nums.Length - k +1; i++)
+            {
+                int max = int.MinValue;
+                int range = k - 1;
+                Console.WriteLine($"Round: {i}");
+                while (range >= 0 && (i+range < nums.Length))
+                {
+                    Console.WriteLine($"Checking for: {nums[i+range]}");
+                    range--;
+                }
+            }
+
+            // Max Heap Approach
+            LinkedListProblems.BuildHeap(nums, nums.Length);
+            LinkedListProblems.PrintHeap(nums, nums.Length);
+            return maxarr.ToArray();
         }
     }
 }

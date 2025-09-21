@@ -53,6 +53,25 @@ namespace LeetCodeProblems.LeetcodeProblems
                 Heapify(arr, i, 0);
             }
         }
+
+        public static void BuildHeap(int[] arr, int n)
+        {
+            int startIndx = (n / 2) - 1;
+            for (int i = startIndx; i >= 0; i--)
+            {
+                Heapify(arr, n, i);
+            }
+        }
+
+        public static void PrintHeap(int[] arr, int n)
+        {
+            Console.WriteLine("Array Representation of Heap is: ");
+            for(int i = 0; i < n; i++)
+            {
+                Console.WriteLine(arr[i] + " ");
+                Console.WriteLine();
+            }
+        }
         public class ListNode
         {
             public int val;
