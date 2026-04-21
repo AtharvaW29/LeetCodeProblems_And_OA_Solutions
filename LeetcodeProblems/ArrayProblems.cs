@@ -258,23 +258,26 @@ namespace LeetCodeProblems.LeetcodeProblems
         // Q. Sliding Window Maximum
         public int[] MaxSlidingWindow(int[] nums, int k)
         {
-            // Brute Force Approach
             List<int> maxarr = new();
-            for (int i = 0; i < nums.Length - k +1; i++)
+            Utilities.Deque dq = new((nums.Length - k) + 1);
+            for (int i = 0; i < nums.Length ; i++)
             {
-                int max = int.MinValue;
-                int range = k - 1;
-                Console.WriteLine($"Round: {i}");
-                while (range >= 0 && (i+range < nums.Length))
+                int num = nums[i];
+                while (!dq.IsEmpty() && dq.GetRear() < num)
                 {
-                    Console.WriteLine($"Checking for: {nums[i+range]}");
-                    range--;
+                    dq.DeleteRear();
+                }
+                dq.InsertRear(num);
+                if(i >= k && nums[i - k] == dq.GetFront())
+                {
+                    dq.DeleteFront();
+                }
+                if(i >= k -1)
+                {
+                    maxarr.Add(dq.GetFront());
                 }
             }
 
-            // Max Heap Approach
-            LinkedListProblems.BuildHeap(nums, nums.Length);
-            LinkedListProblems.PrintHeap(nums, nums.Length);
             return maxarr.ToArray();
         }
     }

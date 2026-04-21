@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+/DP/.venv
+/DP/_pycache_
+/DP/.idea
+/DP/.qodo
