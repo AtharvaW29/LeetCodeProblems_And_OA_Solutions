@@ -118,3 +118,29 @@ class Solution:
 
         else:
             return False
+
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        if numCourses -1 == 0: return [0]
+
+        adj = defaultdict(list)
+        in_deg = [0] * numCourses
+        
+        for a, b in prerequisites:
+            adj[b].append(a)
+            in_deg[a] += 1
+            
+        queue = deque([i for i in range(numCourses) if in_deg[i] == 0])
+        
+        order = []
+        
+        while queue:
+            prereq = queue.popleft()
+            order.append(prereq)
+            
+            for course in adj[prereq]:
+                in_deg[course] -= 1
+
+                if in_deg[course] == 0:
+                    queue.append(course)
+        
+        return order if len(order) == numCourses else []
