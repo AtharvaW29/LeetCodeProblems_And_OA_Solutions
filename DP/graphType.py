@@ -144,3 +144,32 @@ class Solution:
                     queue.append(course)
         
         return order if len(order) == numCourses else []
+    
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        """
+        Minimum Height Trees
+        The intuition is to find the midpoint of the tree
+        such that it is almost equidistant from all the codes.
+        This can be done by ignoring the leaves until only
+        two nodes are left and by using a queue
+        """
+        if n <= 1: return [0]
+        adj = defaultdict(set)
+        in_deg = defaultdict(int)
+        for a, b in edges:
+            adj[a].add(b)
+            adj[b].add(a)
+            in_deg[a] += 1
+            in_deg[b] += 1
+        queue = deque([i for i in range(n) if in_deg[i] == 1])
+        nodes = n
+        while nodes > 2:
+            leaves = len(queue)
+            nodes -= leaves
+            for i in range(leaves):
+                l = queue.popleft()
+                for neigh in adj[l]:
+                    in_deg[neigh] -= 1
+                    if in_deg[neigh] == 1:
+                        queue.append(neigh)
+        return list(queue)
