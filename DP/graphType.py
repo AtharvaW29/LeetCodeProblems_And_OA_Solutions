@@ -173,3 +173,42 @@ class Solution:
                     if in_deg[neigh] == 1:
                         queue.append(neigh)
         return list(queue)
+
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        n = len(heights[0])  # cols
+        m = len(heights)  # rows
+
+        set_p = set()
+        set_a = set()
+
+        queue_p = deque()
+        queue_a = deque()
+
+        for i in range(m):
+            queue_p.append([i, 0])
+            set_p.add((i, 0))
+            queue_a.append([i, n - 1])
+            set_a.add((i, n - 1))
+        for j in range(n):
+            queue_p.append([0, j])
+            set_p.add((0, j))
+            queue_a.append([m - 1, j])
+            set_a.add((m - 1, j))
+
+        def bfs(queue, visited):
+            while queue:
+                ox, oy = queue.popleft()
+                for dx, dy in [[0, 1], [1, 0], [-1, 0], [0, -1]]:
+                    x = ox + dx
+                    y = oy + dy
+                    if 0 <= x < m and 0 <= y < n and (x, y) not in visited:
+                        if heights[ox][oy] <= heights[x][y]:
+                            queue.append([x, y])
+                            visited.add((x, y))
+
+        bfs(queue_p, set_p)
+        bfs(queue_a, set_a)
+        res = (set_p & set_a)
+
+        return [list(item) for item in res]
+
