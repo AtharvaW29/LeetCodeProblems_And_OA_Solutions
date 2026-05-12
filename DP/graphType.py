@@ -212,3 +212,32 @@ class Solution:
 
         return [list(item) for item in res]
 
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if grid is None: return 0
+        m = len(grid)
+        n = len(grid[0])
+        count = 0
+
+        def dfs(i, j):
+            queue = deque()
+            if queue is None: return {}
+            visited = set()
+            queue.append([i,j])
+            while queue:
+                ox, oy = queue.popleft()
+                grid[ox][oy] = '$'
+                for dx, dy in [[0,1], [1, 0], [-1, 0], [0, -1]]:
+                    x = ox + dx
+                    y = oy + dy
+                    if 0 <= x < m and 0 <= y < n and (x,y) not in visited:
+                        if grid[x][y] == '1':
+                            queue.append([x,y])
+                            visited.add((x,y))
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == '1':
+                    dfs(i,j)
+                    count += 1
+
+        return count
