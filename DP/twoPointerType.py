@@ -1,6 +1,6 @@
 from typing import List
 
-class Solution:
+class PointerType:
     def maxArea(self, height: List[int]) -> int:
         l, r = 0, len(height) - 1
         res = 0

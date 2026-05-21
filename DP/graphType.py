@@ -6,7 +6,7 @@ class Node:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 
-class Solution:
+class GraphType:
     def foreignDictionary(self, words: List[str]) -> str:
         adj = {c: set() for w in words for c in w}
         visited = {}
@@ -264,6 +264,13 @@ class Solution:
         return len(state) == n
 
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        """Count the number of connected components in an undirected graph
+           This is an implementation of Disjoint Set Union (DSU) or Union-Find data structure 
+           to count the number of connected components in an undirected graph. 
+           The idea is to iterate through the edges and union the nodes that are connected. 
+           After processing all edges, we can count the number of unique parents (or representatives) 
+           to determine the number of connected components.
+        """
         if len(edges) == 0:
             return n
         adj = defaultdict(set)
