@@ -54,3 +54,18 @@ class Interval(object):
             if intervals[i].start < intervals[i-1].end:
                 return False
         return True
+    
+    def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        starts = sorted(intervals, key=lambda x: x.start)
+        ends = sorted(intervals, key=lambda x: x.end)
+        s, e = 0, 0
+        count, res = 0, 0
+        while s < len(intervals):
+            if starts[s].start < ends[e].end:
+                count += 1
+                s += 1
+            else:
+                e += 1
+                s += 1
+            res = max(res, count)
+        return res
