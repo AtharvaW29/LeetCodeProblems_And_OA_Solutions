@@ -1,6 +1,11 @@
-from typing import List
+from typing import List, Optional
 from collections import defaultdict
 import heapq
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 class Twitter:
     def __init__(self):
@@ -53,3 +58,18 @@ class KthLargest:
             heapq.heappop(self.scores)
 
         return self.scores[0]
+    
+class HeapType:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        arr = []
+        dummy = ListNode(0)
+        crr = dummy
+        for l in lists:
+            while l:
+                arr.append(l.val)
+                l = l.next
+        heapq.heapify(arr)
+        while arr:
+            crr.next = ListNode(heapq.heappop(arr))
+            crr = crr.next
+        return dummy.next

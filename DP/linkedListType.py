@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 from collections import deque
+import heapq
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -54,3 +55,52 @@ class LinkedListType:
                 if slow == fast:
                     return True
             return False
+        
+        def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+            dummy = ListNode(0)
+            crr = dummy
+            while list1 and list2:
+                if list1.val < list2.val:
+                    crr.next = list1
+                    list1 = list1.next
+                else:
+                    crr.next = list2
+                    list2 = list2.next
+                crr = crr.next
+
+            if list1:
+                crr.next = list1
+            if list2:
+                crr.next = list2
+            
+            return dummy.next
+
+        def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+            arr = []
+            dummy = ListNode(0)
+            crr = dummy
+            for l in lists:
+                while l:
+                    arr.append(l.val)
+                    l = l.next
+            heapq.heapify(arr)
+            while arr:
+                crr.next = ListNode(heapq.heappop(arr))
+                crr = crr.next
+            return dummy.next
+        
+        def mergeKListsMethodII(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+            """Method II: O(NlogK) time complexity, O(1) space complexity"""
+            arr = []
+            dummy = ListNode(0)
+            crr = dummy
+            for i, node in enumerate(lists):
+                if node:
+                    heapq.heappush(arr, (node.val, i, node))
+            while arr:
+                val, i, node = heapq.heappop(arr)
+                crr.next = ListNode(val)
+                crr = crr.next
+                if node.next:
+                    heapq.heappush(arr, (node.next.val, i, node.next))
+            return dummy.next
