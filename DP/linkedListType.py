@@ -117,3 +117,53 @@ class LinkedListType:
                 fast = fast.next
             slow.next = slow.next.next
             return dummy.next
+
+        def reorderList(self, head: Optional[ListNode]) -> None:
+            """
+            Do not return anything, modify head in-place instead.
+            """
+            slow = head
+            fast = head
+            while fast and fast.next:
+                slow = slow.next
+                fast = fast.next.next
+            secondhalf = slow.next
+            slow.next = None
+            prev = None
+            while secondhalf:
+                sec_next = secondhalf.next
+                secondhalf.next = prev
+                prev = secondhalf
+                secondhalf = sec_next
+            firsthalf = head
+            secondhalf = prev
+            while secondhalf:
+                tmp_f = firsthalf.next
+                tmp_s =  secondhalf.next
+                firsthalf.next = secondhalf
+                secondhalf.next = tmp_f
+                firsthalf = tmp_f
+                secondhalf = tmp_s
+            return
+        
+        def reorderListMethodII(self, head: Optional[ListNode]) -> None:
+            """
+            Do not return anything, modify head in-place instead.
+            """
+            if not head:
+                return
+            q = deque()
+            curr = head
+            while curr:
+                q.append(curr)
+                curr = curr.next
+            curr = q.popleft()
+            while q:
+                curr.next = q.pop()
+                curr = curr.next
+                if q:
+                    curr.next = q.popleft()
+                    curr = curr.next
+            curr.next = None
+                
+            return
