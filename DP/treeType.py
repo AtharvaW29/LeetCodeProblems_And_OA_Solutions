@@ -41,3 +41,22 @@ class Solution:
             return node.val + max(left, right)
         max_sum(root)
         return self.s
+
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        if root is None or k is None:
+            return 0
+        count = 0
+        res = None
+        def inorder(node, count, k):
+            if node is None or k is None:
+                return count, None
+            count, res = inorder(node.left, count, k)
+            if res is not None:
+                return count, res
+            count += 1
+            if count == k:
+                return count, node.val
+
+            return inorder(node.right, count, k)
+        count, res = inorder(root, count, k)
+        return res
