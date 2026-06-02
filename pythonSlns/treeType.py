@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -59,4 +59,17 @@ class Solution:
 
             return inorder(node.right, count, k)
         count, res = inorder(root, count, k)
+        return res
+
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        res = []
+        def inorder(root, res):
+            if root is None:
+                return res
+            res = inorder(root.left, res)
+            res.append(root.val)
+            return inorder(root.right, res)
+        res = inorder(root, res)
         return res
