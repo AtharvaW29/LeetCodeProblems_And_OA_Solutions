@@ -89,4 +89,23 @@ class Solution:
 
         return res
 
+    def takeCharacters(self, s: str, k: int) -> int:
+        if k is None or k == 0:
+            return 0
+        total = Counter(s)
+        if any(val < k for val in total.values()):
+            return -1
+        if len(total.keys()) != 3:
+            return -1
+        l = 0
+        rem = 0
+        count = {'a': 0, 'b': 0, 'c': 0}
+        for r, char in enumerate(s):
+            count[char] += 1
+            while total['a'] - count['a'] < k or total['b'] - count['b'] < k or total['c'] - count['c'] < k:
+                count[s[l]] -= 1
+                l += 1
+            rem = max(rem, r-l+1)
+        return len(s) - rem
+
 

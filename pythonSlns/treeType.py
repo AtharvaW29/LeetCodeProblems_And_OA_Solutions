@@ -73,3 +73,19 @@ class Solution:
             return inorder(root.right, res)
         res = inorder(root, res)
         return res
+    
+    def minDiffInBST(self, root: Optional[TreeNode]) -> int:
+        if root is None:
+            return 0
+        self.diff = float('inf')
+        self.prev = None
+        def inorder(root):
+            if not root:
+                return
+            inorder(root.left)
+            if self.prev is not None:
+                self.diff = min(self.diff, root.val - self.prev)
+            self.prev = root.val
+            inorder(root.right)
+        inorder(root)
+        return self.diff

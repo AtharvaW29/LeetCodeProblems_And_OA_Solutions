@@ -24,3 +24,18 @@ class DailyChallengeJune:
                 l_finish = max(w_fin, l_strt) + l_dur
                 water_first = min(water_first, l_finish)
         return min(land_first, water_first)
+    
+    def earliestFinishTimeMethodII(self, landStartTime: List[int], landDuration: List[int], waterStartTime: List[int], waterDuration: List[int]) -> int:
+    
+        land_first = 1000001
+        water_first = 1000001
+
+        lt = min([landStartTime[i] + landDuration[i] for i in range(len(landDuration))])
+        wt = min([waterStartTime[i] + waterDuration[i] for i in range(len(waterDuration))])
+        for j in range(len(waterDuration)):
+            l_tmp = max(lt, waterStartTime[j]) + waterDuration[j]
+            land_first = min(land_first, l_tmp)
+        for j in range(len(landDuration)):
+            w_tmp = max(wt, landStartTime[j]) + landDuration[j]
+            water_first = min(water_first, w_tmp)
+        return min(land_first, water_first)
