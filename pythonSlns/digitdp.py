@@ -29,7 +29,7 @@ class DigitDP:
                     ways = pre - t + 1
                 elif cur == pattern:
                     ways = max(0, pre - t)
-                    edge = (pre >= t) * (suf + 1)                
+                    edge = (pre >= t) * (suf + 1)
                 elif cur < pattern:
                     ways = max(0, pre - t)
                 count += ways * mult + edge

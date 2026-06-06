@@ -54,3 +54,13 @@ class DailyChallengeJune:
         land_f = find_min(landStartTime, landDuration, waterStartTime, waterDuration)
         water_f = find_min(waterStartTime, waterDuration, landStartTime, landDuration)
         return min(land_f, water_f)
+    
+    def leftRightDifference(self, arr: List[int]) -> List[int]:
+        l, r = 0, sum(arr)
+        def getdiff(i):
+            nonlocal l, r
+            r -= i
+            res = abs(r - l)
+            l += i
+            return res
+        return [getdiff(i) for i in arr]

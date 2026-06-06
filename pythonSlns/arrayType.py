@@ -70,3 +70,24 @@ class ArrayType:
                 cl += 1
 
         return min(nums[l], nums[cl])
+
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        if k == 0:
+            return [0] * len(code)
+        n = len(code)
+        res = [0] * n
+        code = code + code
+        if k > 0:
+            total = sum(code[1:k+1])
+            for i in range(n):
+                res[i] = total
+                total -= code[i+1]
+                total += code[i+k+1]
+        else:
+            k = abs(k)
+            total = sum(code[n-k:n])
+            for i in range(n):
+                res[i] = total
+                total -= code[n-k+i]
+                total += code[n+i]
+        return res
