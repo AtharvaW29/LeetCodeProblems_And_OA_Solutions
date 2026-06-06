@@ -39,3 +39,18 @@ class DailyChallengeJune:
             w_tmp = max(wt, landStartTime[j]) + landDuration[j]
             water_first = min(water_first, w_tmp)
         return min(land_first, water_first)
+    
+    def earliestFinishTimeII(self, landStartTime: List[int], landDuration: List[int], waterStartTime: List[int], waterDuration: List[int]) -> int:
+        def find_min(ride1StartTime: List[int], ride1Duration: List[int], ride2StartTime: List[int], ride2Duration: List[int]) -> int:
+            res = float('inf')
+            temp_min = float('inf')
+            for r1s, r1d in zip(ride1StartTime, ride1Duration):
+                temp_min = min(temp_min, r1s+r1d)
+            for r2s, r2d in zip(ride2StartTime,ride2Duration):
+                r2strt = max(temp_min, r2s) + r2d
+                res = min(res, r2strt)
+            return res
+        
+        land_f = find_min(landStartTime, landDuration, waterStartTime, waterDuration)
+        water_f = find_min(waterStartTime, waterDuration, landStartTime, landDuration)
+        return min(land_f, water_f)
