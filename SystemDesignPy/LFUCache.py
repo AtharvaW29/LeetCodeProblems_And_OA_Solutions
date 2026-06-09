@@ -36,7 +36,7 @@ class LinkedList:
 
     def update(self, value):
         self.pop(value)
-        self.PushRight(value)
+        self.pushRight(value)
 
 class LFUCache:
 

@@ -1,4 +1,11 @@
-from typing import List
+from typing import List, Optional
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class DailyChallengeJune:
     def minimumCost(self, cost: List[int]) -> int:
@@ -64,3 +71,19 @@ class DailyChallengeJune:
             l += i
             return res
         return [getdiff(i) for i in arr]
+
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        treenodes = {}
+        children = set()
+        for parent, child, isLeft in descriptions:
+            children.add(child)
+            if parent not in treenodes:
+                treenodes[parent] = TreeNode(parent)
+            if child not in treenodes:
+                treenodes[child] = TreeNode(child) 
+            if isLeft == 1:
+                treenodes[parent].left = treenodes[child]
+            elif isLeft == 0:
+                treenodes[parent].right = treenodes[child]
+        res = (set(treenodes.keys()) - children).pop()
+        return treenodes[res]
