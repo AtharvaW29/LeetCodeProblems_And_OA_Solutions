@@ -1,5 +1,32 @@
 from typing import List, Optional
+from collections import defaultdict
+import heapq
 
+class SparseTable:
+    def __init__(self, nums: List[int]):
+        n = len(nums)
+        bw = n.bit_length()
+        self.min_ = [[0] * n for _ in range(bw)]
+        self.max_ = [[0] * n for _ in range(bw)]
+
+        for i in range(n):
+            self.min_[0][i] = self.max_[0][i] = nums[i]
+
+        for i in range(1, bw):
+            step = 1 << (i - 1)
+            span = 1 << i
+            for j in range(n - span + 1):
+                self.min_[i][j] = min(self.min_[i - 1][j], self.min_[i - 1][j + step])
+                self.max_[i][j] = max(self.max_[i - 1][j], self.max_[i - 1][j + step])
+
+    def query(self, left: int, right: int) -> int:
+        if left >= right:
+            return 0
+        length = right - left
+        k = length.bit_length() - 1
+        mx = max(self.max_[k][left], self.max_[k][right - (1 << k)])
+        mn = min(self.min_[k][left], self.min_[k][right - (1 << k)])
+        return mx - mn
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -87,3 +114,37 @@ class DailyChallengeJune:
                 treenodes[parent].right = treenodes[child]
         res = (set(treenodes.keys()) - children).pop()
         return treenodes[res]
+
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        if n == 0 or k == 0:
+            return 0
+
+        st = SparseTable(nums)
+
+        # Max-heap via negative values:
+        # ( -range_value, left, right )
+        heap = [(-st.query(0, n), 0, n)]
+        seen = {(0, n)}
+
+        result = 0
+
+        while heap and k > 0:
+            neg_val, l, r = heapq.heappop(heap)
+            val = -neg_val
+            result += val
+            k -= 1
+
+            if l < r - 1:
+                left_child = (l, r - 1)
+                right_child = (l + 1, r)
+
+                if left_child not in seen:
+                    seen.add(left_child)
+                    heapq.heappush(heap, (-st.query(*left_child), *left_child))
+
+                if right_child not in seen:
+                    seen.add(right_child)
+                    heapq.heappush(heap, (-st.query(*right_child), *right_child))
+
+        return result
