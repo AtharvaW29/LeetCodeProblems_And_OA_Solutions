@@ -148,3 +148,24 @@ class DailyChallengeJune:
                     heapq.heappush(heap, (-st.query(*right_child), *right_child))
 
         return result
+    
+    def assignEdgeWeights(self, edges: List[List[int]]) -> int:
+        if not edges:
+            return 0
+        adj = defaultdict(set)
+        children = set()
+        MOD = 1_000_000_007
+        for e in edges:
+            p, c = e[0], e[1]
+            children.add(c)
+            adj[p].add(c)
+        def depth(n, p, crr, adj):
+            max_d = crr
+            for neigh in adj[n]:
+                if neigh != p:
+                    max_d = max(max_d, depth(neigh, n, crr+1, adj))
+            return max_d
+        r = (set(adj.keys()) - children).pop()
+        x = depth(r, -1, 0, adj) - 1
+            
+        return pow(2, x, MOD)
