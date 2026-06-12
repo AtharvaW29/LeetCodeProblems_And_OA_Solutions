@@ -169,3 +169,52 @@ class DailyChallengeJune:
         x = depth(r, -1, 0, adj) - 1
             
         return pow(2, x, MOD)
+
+    def assignEdgeWeightsII(self, edges: List[List[int]], queries: List[List[int]]) -> List[int]:
+        adj = defaultdict(list)
+        MOD = 1_000_000_007
+        for u,v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+        n = len(edges) + 1
+        pow_2 = [1] * (n+1)
+        for i in range(1, n+1):
+            pow_2[i] = (pow_2[i-1] * 2)%MOD
+
+        log = n.bit_length() + 1
+        depth = [0] * (n+1)
+        up = [[0] * log for _ in range(n+1)]
+
+        def dfs(node, par, d):
+            depth[node] = d
+            up[node][0] = par
+            for i in range(1, log):
+                up[node][i] = up[up[node][i-1]][i-1]
+            for neighbor in adj[node]:
+                if neighbor != par:
+                    dfs(neighbor, node, d+1)
+        dfs(1,1,0)
+
+        def lca(u, v):
+            if depth[u] < depth[v]:
+                u, v = v, u
+            diff = depth[u] - depth[v]
+            for i in range(log):
+                if(diff >> i) & 1:
+                    u = up[u][i]
+            if u == v:
+                return u
+            for i in range(log-1, -1, -1):
+                if up[u][i] != up[v][i]:
+                    u = up[u][i]
+                    v = up[v][i]
+            return up[u][0]
+        res = []
+        for x,y in queries:
+            if x==y:
+                res.append(0)
+            else:
+                lca_ = lca(x, y)
+                chain_length = depth[x] + depth[y] - 2*depth[lca_]
+                res.append(pow_2[chain_length-1])
+        return res
