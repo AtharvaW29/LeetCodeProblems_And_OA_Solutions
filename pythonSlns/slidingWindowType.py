@@ -1,4 +1,4 @@
-from collections import deque
+from collections import deque, defaultdict
 from typing import List, Counter
 from operator import itemgetter
 
@@ -107,5 +107,22 @@ class Solution:
                 l += 1
             rem = max(rem, r-l+1)
         return len(s) - rem
+    
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = defaultdict(int)
+        res = 0
+        l = 0
+        max_count = 0
+        for r in range(len(s)):
+            # window_size = r - l
+            # window = s[l:r+1]
+            # replacements_needed = window_size - most_freq_char_count
+            count[s[r]] += 1
+            max_count = max(max_count, count[s[r]])
+            while (r-l + 1) - max_count > k:
+                count[s[l]] -= 1
+                l += 1
+            res = max(res, r-l + 1)
+        return res
 
 

@@ -218,3 +218,12 @@ class DailyChallengeJune:
                 chain_length = depth[x] + depth[y] - 2*depth[lca_]
                 res.append(pow_2[chain_length-1])
         return res
+
+    def mapWordWeights(self, words: List[str], weights: List[int]) -> str:
+        out = []
+        for w in words:
+            total = 0
+            for c in w:
+                total += weights[ord(c) - 97]
+            out.append(chr(ord('z') - (total % 26)))
+        return ''.join(out)
