@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import List
 
 class TrieNode:
@@ -33,3 +34,21 @@ class StreamChecker:
             if curr.isEndOfWord:
                 return True
         return False
+
+class SummaryRanges:
+
+    def __init__(self):
+        self.store = OrderedDict()
+    
+    def addNum(self, value: int) -> None:
+        self.store[value] = True
+
+    def getIntervals(self) -> List[List[int]]:
+        res = []
+        sorted_intervals = sorted(self.store.keys())
+        for n in sorted_intervals:
+            if res and res[-1][1] + 1 == n:
+                res[-1][1] = n
+            else:
+                res.append([n, n])
+        return res
