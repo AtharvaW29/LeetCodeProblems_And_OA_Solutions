@@ -2,6 +2,10 @@ from typing import List, Optional
 from collections import defaultdict
 import heapq
 
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 class SparseTable:
     def __init__(self, nums: List[int]):
         n = len(nums)
@@ -227,3 +231,27 @@ class DailyChallengeJune:
                 total += weights[ord(c) - 97]
             out.append(chr(ord('z') - (total % 26)))
         return ''.join(out)
+    
+    def pairSum(self, head: Optional[ListNode]) -> int:
+        dummy = ListNode(0)
+        dummy.next = head
+        slow = dummy
+        fast = head
+        res = 0
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        secondHalf = slow.next
+        slow.next = None
+        prev = None
+        while secondHalf:
+            sec_next = secondHalf.next
+            secondHalf.next = prev
+            prev = secondHalf
+            secondHalf = sec_next
+        secondHalf = prev
+        while secondHalf:
+            res = max(res, head.val + secondHalf.val)
+            head = head.next
+            secondHalf = secondHalf.next
+        return res
