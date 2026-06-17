@@ -255,3 +255,37 @@ class DailyChallengeJune:
             head = head.next
             secondHalf = secondHalf.next
         return res
+
+    def processStr(self, s: str, k: int) -> str:
+        res:list = []
+        n = len(s)
+        lengths = [0] * n
+        curr = 0
+        for i, c in enumerate(s):
+            if c == '*':
+                if curr > 0:
+                    curr -=1
+            elif c == "#":
+                curr *= 2
+            elif c == "%":
+                pass
+            else:
+               curr += 1
+            lengths[i] = curr 
+        if k >= curr:
+            return '.'
+        for i in reversed(range(n)):
+            c = s[i]
+            prev_sz = lengths[i-1] if i > 0 else 0
+
+            if c == "*":
+                continue
+            elif c == "#":
+                if k >= prev_sz:
+                    k -= prev_sz
+            elif c == "%":
+                k = prev_sz - 1 - k
+            else:
+                if prev_sz == k:
+                    return c
+        return '.'
