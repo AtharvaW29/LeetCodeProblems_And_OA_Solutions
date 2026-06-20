@@ -289,3 +289,28 @@ class DailyChallengeJune:
                 if prev_sz == k:
                     return c
         return '.'
+
+    def maxBuilding(self, n: int, restrictions: List[List[int]]) -> int:
+        res_copy = restrictions.copy()
+        res_copy.append([1, 0])
+        res_copy.sort()
+        if not res_copy or res_copy[-1][0] !=n:
+            res_copy.append([n, n-1])
+        k = len(res_copy)
+        for i in range(1, k):
+            crrH = res_copy[i-1][1] + (res_copy[i][0] - res_copy[i-1][0])
+            res_copy[i][1] = min(res_copy[i][1], crrH)
+        
+        for i in range(k-2, 0, -1):
+            crrH = res_copy[i+1][1] + (res_copy[i+1][0]-res_copy[i][0])
+            res_copy[i][1] = min(res_copy[i][1], crrH)
+
+        max_h = 0
+
+        for i in range(k-1):
+            left_h = res_copy[i][1]
+            right_h = res_copy[i+1][1]
+            dist = res_copy[i+1][0] - res_copy[i][0]
+            h = (left_h + right_h + dist) // 2
+            max_h = max(max_h, h)
+        return max_h
