@@ -314,3 +314,30 @@ class DailyChallengeJune:
             h = (left_h + right_h + dist) // 2
             max_h = max(max_h, h)
         return max_h
+
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        """
+        Counting sort approach:
+         - Count the frequency of each cost
+         - Iterate through the costs in ascending order, buying as many as possible until coins run out
+         - Return the total number of ice creams bought
+         Time complexity: O(n + m) where n is the number of costs and m is the max cost
+         Space complexity: O(m) for the counting array
+        """
+        max_range = max(costs) + 1
+        counts = [0] * max_range
+        res = [0] * len(costs)
+        for num in costs:
+            counts[num] += 1
+        for i in range(1, len(counts)):
+            counts[i] += counts[i-1]
+        for num in reversed(costs):
+            res[counts[num] -1] = num
+            counts[num] -= 1
+        i = 0
+        while coins > 0 and i < len(res):
+            if coins < res[i]:
+                return i
+            coins -= res[i]
+            i += 1
+        return i
