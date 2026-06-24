@@ -341,3 +341,31 @@ class DailyChallengeJune:
             coins -= res[i]
             i += 1
         return i
+
+    def zigZagArrays(self, n: int, l: int, r: int) -> int:
+        MOD = 1_000_000_000 + 7
+        m = r - l + 1
+        if n==1:
+            return m
+        dp_up = [0] * m
+        dp_down = [0] * m
+        # base case
+        for y in range(m):
+            dp_up[y] = y
+            dp_down[y] = m-1-y
+        # dp
+        for _ in range(3, n+1):
+            prefUp = [0] * (m+1)
+            prefDown = [0] * (m+1)
+            for j in range(m):
+                prefUp[j+1] = (prefUp[j] + dp_up[j]) % MOD
+                prefDown[j+1] = (prefDown[j] + dp_down[j]) % MOD
+            new_dp_up = [0]*m
+            new_dp_down = [0]*m
+            total_up = prefUp[m]
+            for y in range(m):
+                new_dp_up[y] = prefDown[y]
+                new_dp_down[y] = (total_up - prefUp[y+1]) % MOD
+            dp_up = new_dp_up
+            dp_down = new_dp_down
+        return (sum(dp_up) + sum(dp_down)) % MOD
