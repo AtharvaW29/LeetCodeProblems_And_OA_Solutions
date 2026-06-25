@@ -369,3 +369,67 @@ class DailyChallengeJune:
             dp_up = new_dp_up
             dp_down = new_dp_down
         return (sum(dp_up) + sum(dp_down)) % MOD
+
+class ZigZagArraysII:
+    MOD = 1_000_000_007
+
+    def mat_mul(self, A, B):
+        n = len(A)
+        m = len(B[0])
+        p = len(B)
+        C = [[0] * m for _ in range(n)]
+        for i in range(n):
+            for k in range(p):
+                if A[i][k] == 0:
+                    continue
+                aik = A[i][k]
+                for j in range(m):
+                    C[i][j] = (C[i][j] + aik * B[k][j]) % self.MOD
+        return C
+
+    def mat_pow(self, M, e):
+        n = len(M)
+        R = [[0] * n for _ in range(n)]
+        for i in range(n):
+            R[i][i] = 1
+        while e:
+            if e & 1:
+                R = self.mat_mul(R, M)
+            M = self.mat_mul(M, M)
+            e >>= 1
+        return R
+
+    def mat_vec_mul(self, M, v):
+        n = len(M)
+        res = [0] * n
+        for i in range(n):
+            s = 0
+            for j, val in enumerate(v):
+                s = (s + M[i][j] * val) % self.MOD
+            res[i] = s
+        return res
+
+    def zigZagArrays(self, n, l, r):
+        m = r - l + 1
+        if n == 1:
+            return m
+
+        size = 2 * m
+        T = [[0] * size for _ in range(size)]
+
+        for y in range(m):
+            for x in range(y):
+                T[y][m + x] = 1
+
+        for y in range(m):
+            for x in range(y + 1, m):
+                T[m + y][x] = 1
+
+        V2 = [0] * size
+        for y in range(m):
+            V2[y] = y
+            V2[m + y] = m - 1 - y
+
+        P = self.mat_pow(T, n - 2)
+        Vn = self.mat_vec_mul(P, V2)
+        return sum(Vn) % self.MOD
