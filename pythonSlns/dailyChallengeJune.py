@@ -433,3 +433,58 @@ class ZigZagArraysII:
         P = self.mat_pow(T, n - 2)
         Vn = self.mat_vec_mul(P, V2)
         return sum(Vn) % self.MOD
+
+class Fenwick:
+    def __init__(self, n:int):
+        self.n = n
+        self.bit  = [0] * (n+1)
+
+    def update(self, i:int, delta:int) -> None:
+        while i <= self.n:
+            self.bit[i] += delta
+            i += i & -i
+    
+    def query(self, i: int) -> int:
+        s = 0
+        while i > 0:
+            s += self.bit[i]
+            i -= i & -i
+        return s
+
+class MajoritySubArrays:
+    def countMajoritySubarrays(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        pref = 0
+        res = 0
+        offset = n + 1
+        size = 2 * n + 3
+        fw = Fenwick(size)
+        fw.update(offset, 1)
+        for v in nums:
+            if v == target:
+                pref += 1
+            else:
+                pref -= 1
+            res += fw.query(pref + offset - 1)
+            fw.update(pref+offset, 1)
+        return res
+
+    def maximumLength(self, nums: List[int]) -> int:
+        freq = defaultdict(int)
+        for n in nums: freq[n] += 1
+        n = freq[1]
+        ans = n if n%2 == 1 else max(0, n-1)
+        for k in freq:
+            if k == 1:
+                continue
+            size = 0
+            crr = k
+            while crr in freq and freq[crr] >= 2:
+                size += 2
+                crr *= crr
+            if crr in freq and freq[crr] < 2:
+                size += 1
+            elif crr not in freq:
+                size -= 1
+            ans = max(ans, size)
+        return ans
