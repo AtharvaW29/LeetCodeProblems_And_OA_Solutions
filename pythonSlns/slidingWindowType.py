@@ -124,3 +124,21 @@ class Solution:
                 l += 1
             res = max(res, r-l + 1)
         return res
+    
+    def findAllSubStrings(self, s: str) -> int:
+        """
+        Find all the substrings where 'a',
+        'b', and 'c' exist
+        """
+        freq = defaultdict(int)
+        ans = 0
+        l = 0
+        for r in range(len(s)):
+            freq[s[r]] += 1
+            while len(freq) == 3:
+                ans += len(s) - r
+                freq[s[l]] -= 1
+                if freq[s[l]] == 0:
+                    del freq[s[l]]
+                l += 1
+        return ans
